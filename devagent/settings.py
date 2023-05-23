@@ -10,6 +10,8 @@ DEBUG = False
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",")]
 
 INSTALLED_APPS = [
+    "manager",
+    "users",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -86,6 +88,9 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
 EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS", "False") == "True" else False
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
+
+# PROJECT VARIABLES
+AUTH_PASSWORD_AGE = int(os.environ.get("AUTH_PASSWORD_AGE", "7"))
 
 # store sensitive data in env variables or overwrite in local.py file - check examples in local_example.py file
 try:
