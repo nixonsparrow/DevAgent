@@ -43,7 +43,7 @@ class BaseUser(AbstractUser):
 
     def send_activation_message(self, subject, template_name=None):
         if not template_name:
-            template_name = "blueboosterauth/account_activation.html"
+            template_name = "users/account_activation.html"
 
         self.send_confirmation_email(subject, template_name)
 
