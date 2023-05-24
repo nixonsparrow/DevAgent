@@ -1,10 +1,10 @@
 {% extends "main/base.html" %}
 {% load i18n %}
 {% block content %}
-    <h2>{% trans "Logged out successfully" %}</h2>
+    <h2>{% translate "Logged out successfully" %}</h2>
     <div class="border-top pt-3">
         <small class="text-muted black">
-            <a href="{% url 'login' %}">{% trans "Login again" %}</a>
+            <a href="{% url 'login' %}">{% translate "Login again" %}</a>
         </small>
     </div>
 {% endblock content %}

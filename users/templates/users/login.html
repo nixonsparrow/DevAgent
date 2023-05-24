@@ -1,23 +1,23 @@
 {% extends "main/base.html" %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 {% block content %}
     <div class="content-section">
         <form method="POST" id="login_form">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Logowanie</legend>
+                <legend class="border-bottom mb-4">{% translate "Log in" %}</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="dirty-button btn" type="submit" id="log_in_button">Zaloguj się!</button>
+                <button class="dirty-button btn" type="submit" id="log_in_button">{% translate "Log in" %}!</button>
                 <small class="text-muted ml-2">
-                    <a href="{% url 'password_reset' %}">Skleroza dopadła i nie pamiętasz hasła?</a>
+                    <a href="{% url 'password_reset' %}">{% translate "Don't remember your password?" %}</a>
                 </small>
             </div>
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Nie masz jeszcze konta? <a class="ml-2" href="{% url 'register' %}">Zarejestruj się!</a>
+                {% translate "Don't have an account yet" %}? <a class="ml-2" href="{% url 'register' %}">{% translate "Register" %}!</a>
             </small>
         </div>
     </div>

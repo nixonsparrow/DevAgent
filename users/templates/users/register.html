@@ -1,19 +1,18 @@
 {% extends "main/base.html" %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags i18n %}
 {% block content %}
     <div class="content-section">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Rejestracja</legend>
+                <legend class="border-bottom mb-4">{% translate "Register" %}</legend>
                 {{ form|crispy }}
             </fieldset>
-
             <table>
                 <tr>
                     <td>
                         <div class="form-group">
-                            <button class="dirty-button btn" type="submit">Zapisz się!</button>
+                            <button class="dirty-button btn" type="submit">{% translate "Sign up" %}!</button>
                         </div>
                     </td>
                 </tr>
@@ -21,7 +20,7 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Masz już konto? <a class="ml-2" href="{% url 'login'%}">Zaloguj się!</a>
+                {% translate "Already have account" %}? <a class="ml-2" href="{% url 'login'%}">{% translate "Log in" %}!</a>
             </small>
         </div>
     </div>

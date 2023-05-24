@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={"unique": _("Please check spelling or choose different email address.")},
     )
 
-    image = models.ImageField(_("profile photo"), default="default_profile_image.jpg", upload_to="profile_pics/%y")
+    image = models.ImageField(_("profile photo"), default="default_profile_image.jpg", upload_to="profile_pics/%Y")
     password_expiration = models.DateTimeField(_("password expiration time"), default=password_expiration_time)
 
     is_staff = models.BooleanField(
