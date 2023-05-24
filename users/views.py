@@ -11,7 +11,9 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from users.forms import UserRegisterForm
-from users.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def register(request):
