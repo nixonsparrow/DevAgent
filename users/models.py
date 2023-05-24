@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.template import loader
 from django.utils.encoding import force_bytes
@@ -68,9 +67,3 @@ class BaseUser(AbstractUser):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         abstract = True
-
-
-class LoginAttemptsRegister(models.Model):
-    login = models.CharField(max_length=254)
-    timetable = ArrayField(models.DateTimeField(_("failed login attempts")), blank=True, default=list)
-    timeout = models.DateTimeField(_("user login lock"), null=True, blank=True)

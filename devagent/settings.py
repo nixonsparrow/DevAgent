@@ -90,6 +90,7 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
 
 # PROJECT VARIABLES
+BASE_URL = os.environ.get("BASE_URL", "")
 AUTH_PASSWORD_AGE = int(os.environ.get("AUTH_PASSWORD_AGE", "7"))
 
 # store sensitive data in env variables or overwrite in local.py file - check examples in local_example.py file

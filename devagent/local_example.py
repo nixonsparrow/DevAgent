@@ -1,5 +1,6 @@
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+BASE_URL = "localhost"
 
 SECRET_KEY = "yourOWNtotallySECUREsecretKEY-123456789!@#$%^&*("
 
