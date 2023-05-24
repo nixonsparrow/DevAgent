@@ -13,13 +13,18 @@ USER = {
 }
 
 
-class ProfilePageTestCase(TestCase):
+class BaseTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username=USER.get("name"),
             email=USER.get("email"),
             password=USER.get("pass")
         )
+
+
+class ProfilePageTestCase(BaseTestCase):
+    def setUp(self):
+        super().setUp()
         self.response = self.client.get(reverse_lazy("profile"))
 
     def test_login_by_email(self):
@@ -40,17 +45,13 @@ class ProfilePageTestCase(TestCase):
         self.assertTemplateUsed(response_after_login, "users/profile.html")
 
 
-class PasswordResetTestCase(TestCase):
+class PasswordResetTestCase(BaseTestCase):
     def setUp(self):
-        self.user = User.objects.create_user(
-            username=USER.get("name"),
-            password=USER.get("pass"),
-            email=USER.get("email")
-        )
+        super().setUp()
         self.response = self.client.get(reverse("password_reset"))
 
     def test_template_used(self):
-        self.assertEqual(self.response.template_name[0], "users/password_reset.html")
+        self.assertTemplateUsed(self.response, "users/password_reset.html")
 
     def test_status_code(self):
         self.assertEqual(self.response.status_code, 200)
