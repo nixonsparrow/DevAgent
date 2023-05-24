@@ -8,6 +8,7 @@ from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
 from .utils import password_expiration_time
 
@@ -25,7 +26,7 @@ class PasswordHistory(models.Model):
         verbose_name = _("password history")
 
 
-class BaseUser(AbstractUser):
+class User(AbstractUser):
     email = models.EmailField(
         _("email address"),
         max_length=254,
@@ -33,6 +34,7 @@ class BaseUser(AbstractUser):
         error_messages={"unique": _("A user with that email address already exists.")},
     )
 
+    image = models.ImageField(_("profile photo"), default='default.jpg', upload_to='profile_pics/%y')
     password_expiration = models.DateTimeField(_("password expiration time"), default=password_expiration_time)
     passwords = GenericRelation(PasswordHistory, content_type_field="content_type", object_id_field="object_id")
 
@@ -42,7 +44,7 @@ class BaseUser(AbstractUser):
 
     def send_activation_message(self, subject, template_name=None):
         if not template_name:
-            template_name = "users/account_activation.html"
+            template_name = "users/mail/account_activation.html"
 
         self.send_confirmation_email(subject, template_name)
 
@@ -67,3 +69,31 @@ class BaseUser(AbstractUser):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         abstract = True
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+        width, height = img.size  # get dimensions
+
+        # check which one is smaller
+        if height < width:
+            # make square by cutting off equal amounts left and right
+            left = (width - height) / 2
+            right = (width + height) / 2
+            top = 0
+            bottom = height
+            img = img.crop((left, top, right, bottom))
+
+        elif width < height:
+            # make square by cutting off bottom
+            left = 0
+            right = width
+            top = 0
+            bottom = width
+            img = img.crop((left, top, right, bottom))
+
+        if width > 300 and height > 300:
+            img.thumbnail((300, 300))
+
+        img.save(self.image.path)

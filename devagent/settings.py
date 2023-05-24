@@ -78,8 +78,14 @@ TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
+STATIC_URL = "/static/"
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+LOGIN_REDIRECT_URL = "welcome"
+LOGIN_URL = "login"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # EMAIL VARIABLES
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")

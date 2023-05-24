@@ -1,0 +1,23 @@
+{% load i18n static %}{% autoescape off %}
+<!doctype html>
+<html>
+
+<head>
+    <title>
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+<div style="">
+    Aby aktywować możliwość korzystania z serwisu kliknij poniższy link lub skopiuj go do przeglądarki:
+    {% block reset_link %}
+    <a href="{{ domain }}{% url 'user_password_reset_confirm' uidb64=uid token=token %}">
+        {{ domain }}{% url 'user_password_reset_confirm' uidb64=uid token=token %}
+    </a>
+    {% endblock %}
+</div>
+</body>
+
+</html>
