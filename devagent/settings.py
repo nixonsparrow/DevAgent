@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "crispy_forms",
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
@@ -83,9 +85,9 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LOGIN_REDIRECT_URL = "welcome"
+LOGIN_REDIRECT_URL = "homepage"
 LOGIN_URL = "login"
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+AUTH_USER_MODEL = "users.User"
 
 # EMAIL VARIABLES
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
@@ -98,6 +100,8 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASS", "")
 # PROJECT VARIABLES
 BASE_URL = os.environ.get("BASE_URL", "")
 AUTH_PASSWORD_AGE = int(os.environ.get("AUTH_PASSWORD_AGE", "7"))
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # store sensitive data in env variables or overwrite in local.py file - check examples in local_example.py file
 try:

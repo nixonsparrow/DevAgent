@@ -1,4 +1,5 @@
-{% load i18n static %}{% autoescape off %}
+{% load i18n static %}
+{% autoescape off %}
 <!doctype html>
 <html>
 
@@ -11,7 +12,7 @@
 
 <body>
 <div style="">
-    Aby aktywować możliwość korzystania z serwisu kliknij poniższy link lub skopiuj go do przeglądarki:
+    {% translate "Please go to the following page to activate your account" %}:
     {% block reset_link %}
     <a href="{{ domain }}{% url 'user_password_reset_confirm' uidb64=uid token=token %}">
         {{ domain }}{% url 'user_password_reset_confirm' uidb64=uid token=token %}
@@ -21,3 +22,4 @@
 </body>
 
 </html>
+{% endautoescape %}
