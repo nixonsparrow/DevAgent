@@ -1,0 +1,31 @@
+name: Python Tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7.3, 3.9.0, 3.11.3]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/web/requirements.txt
+          pip install pytest
+      - name: Test code
+        env:
+          SECRET_KEY: AOIEHF0j3pwoegj3g032g-ber-b99032jpowe##gkpowegjpi8320
+          DEBUG: False
+          ALLOWED_HOSTS: "127.0.0.1,localhost"
+          FLASK_APP: tictactoe
+        run: |
+          python manage.py test
