@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, UserManager as DjangoUserManager
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import UserManager as DjangoUserManager
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -38,7 +39,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={"unique": _("Please check spelling or choose different email address.")},
     )
 
-    image = models.ImageField(_("profile photo"), default="default_profile_image.jpg", upload_to="profile_pics/%Y")
+    image = models.ImageField(
+        _("profile photo"),
+        default="default_profile_image.jpg",
+        upload_to="profile_pics/%Y",
+    )
     password_expiration = models.DateTimeField(_("password expiration time"), default=password_expiration_time)
 
     is_staff = models.BooleanField(
@@ -50,8 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         _("active"),
         default=True,
         help_text=_(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
+            "Designates whether this user should be treated as active. " "Unselect this instead of deleting accounts."
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)

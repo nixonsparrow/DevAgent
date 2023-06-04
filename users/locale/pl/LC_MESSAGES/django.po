@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR nixonsparrow@gmail.com, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 16:58+0200\n"
+"POT-Creation-Date: 2023-06-04 21:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,80 +20,152 @@ msgstr ""
 "%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
 "%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: .\models.py:28
-msgid "password"
-msgstr "hasło"
-
-#: .\models.py:29
-msgid "timestamp"
-msgstr ""
-
-#: .\models.py:33
-msgid "password history"
-msgstr "historia haseł"
-
-#: .\models.py:38
+#: .\models.py:26
 msgid "username"
 msgstr "nazwa użytkownika"
 
-#: .\models.py:41
+#: .\models.py:29
 msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-msgstr "Wymagane. 150 znaków lub mniej. Wyłącznie litery, cyfry oraz znaki: @/./+/-/_."
+msgstr ""
+"Wymagane. 150 znaków lub mniej. Wyłącznie litery, cyfry oraz znaki: @/./+/-/"
+"_."
 
-#: .\models.py:44
+#: .\models.py:32
 msgid "A user with that username already exists."
 msgstr "Użytkownik o takiej nazwie już istnieje."
 
-#: .\models.py:48
+#: .\models.py:36
 msgid "email address"
 msgstr "Adres e-mail"
 
-#: .\models.py:51
+#: .\models.py:39
 msgid "Please check spelling or choose different email address."
-msgstr ""
+msgstr "Sprawdź pisownię lub wybierz inny adres e-mail."
 
-#: .\models.py:54
+#: .\models.py:43
 msgid "profile photo"
-msgstr ""
+msgstr "zdjęcie profilowe"
 
-#: .\models.py:55
+#: .\models.py:47
 msgid "password expiration time"
-msgstr ""
+msgstr "czas wygaśnięcia hasła"
 
-#: .\models.py:58
+#: .\models.py:50
 msgid "staff status"
-msgstr ""
+msgstr "status personelu"
 
-#: .\models.py:60
+#: .\models.py:52
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
+"Określa, czy użytkownik może zalogować się do tej witryny administratora"
 
-#: .\models.py:63
+#: .\models.py:55
 msgid "active"
-msgstr ""
+msgstr "aktywny"
 
-#: .\models.py:66
+#: .\models.py:58
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
+"Określa, czy ten użytkownik powinien być traktowany jako aktywny.Odznacz tę "
+"opcję zamiast usuwać konto."
+
+#: .\models.py:61
+msgid "date joined"
+msgstr "data dołączenia"
 
 #: .\models.py:70
-msgid "date joined"
-msgstr ""
-
-#: .\models.py:106
 msgid "user"
-msgstr ""
+msgstr "użytkownik"
 
-#: .\models.py:107
+#: .\models.py:71
 msgid "users"
-msgstr ""
+msgstr "użytkownicy"
+
+#: .\templates\users\login.html:8 .\templates\users\login.html:12
+#: .\templates\users\register.html:23
+msgid "Log in"
+msgstr "Zaloguj się"
+
+#: .\templates\users\login.html:14
+msgid "Don't remember your password?"
+msgstr "Nie pamiętasz hasła?"
+
+#: .\templates\users\login.html:20
+msgid "Don't have an account yet"
+msgstr "Nie masz jeszcze konta"
+
+#: .\templates\users\login.html:20 .\templates\users\register.html:8
+msgid "Register"
+msgstr "Zarejestruj się"
 
 #: .\templates\users\logout.html:4
 msgid "Logged out successfully"
-msgstr ""
+msgstr "Wylogowano pomyślnie"
 
 #: .\templates\users\logout.html:7
 msgid "Login again"
+msgstr "Zaloguj się ponownie"
+
+#: .\templates\users\mail\account_activation.html:15
+msgid "Please go to the following page to activate your account"
+msgstr "Udaj się do podanej strony, aby aktywować swoje konto"
+
+#: .\templates\users\mail\password_reset_email.html:15
+#, python-format
+msgid ""
+"You're receiving this email because you requested\n"
+"a password reset for your user account at %(site_name)s."
 msgstr ""
+"Otrzymujesz ten e-mail ponieważ prosiłeś/-łaś o zresetowaniehasła dla "
+"Twojego konta w serwisie %(site_name)s."
+
+#: .\templates\users\mail\password_reset_email.html:19
+msgid "Please go to the following page and choose a new password"
+msgstr "Udaj się do podanej strony i ustaw nowe hasło"
+
+#: .\templates\users\mail\password_reset_email.html:29
+msgid "Remember to use your email as the username"
+msgstr "Pamiętaj, aby wykorzystać adres e-mail jako nazwę użytkownika"
+
+#: .\templates\users\mail\password_reset_email.html:32
+msgid "Thanks for using our site"
+msgstr "Dziękujemy za korzystanie z naszej strony"
+
+#: .\templates\users\mail\password_reset_email.html:35
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Zespół %(site_name)s"
+
+#: .\templates\users\password_reset.html:8
+msgid "Password recovery"
+msgstr "Odzyskiwanie hasła"
+
+#: .\templates\users\password_reset.html:12
+msgid "Reset password"
+msgstr "Zresetuj hasło"
+
+#: .\templates\users\password_reset_done.html:5
+msgid "An email has been sent to given address"
+msgstr "Na podany adres została wysłana wiadomość"
+
+#: .\templates\users\password_reset_done.html:6
+msgid "Proceed with information it includes"
+msgstr "Kontynuuj zgodnie z informacjami w nim zawartymi"
+
+#: .\templates\users\profile.html:8
+msgid "Profile"
+msgstr "Profil"
+
+#: .\templates\users\profile.html:13
+msgid "Update profile"
+msgstr "Zaktualizuj profil"
+
+#: .\templates\users\register.html:15
+msgid "Sign up"
+msgstr "Zarejestruj się"
+
+#: .\templates\users\register.html:23
+msgid "Already have account"
+msgstr "Masz już konto?"

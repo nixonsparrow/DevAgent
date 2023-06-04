@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 120
+target-version = ["py37"]
+force-exclude = "migrations/"
+[tool.isort]
+profile = "black"
+extend_skip_glob  = [
+    ".gitignore",
+    "users/migrations",
+    "manager/migrations",
+]

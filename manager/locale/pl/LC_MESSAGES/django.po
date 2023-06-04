@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-04 20:51+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
+"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
+"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: .\models.py:17
+msgid "offer"
+msgstr "oferta"
+
+#: .\models.py:18
+msgid "offers"
+msgstr "oferty"
+
+#: .\models.py:22
+msgid "None"
+msgstr "Brak"
+
+#: .\models.py:23
+msgid "Business to business"
+msgstr "Działalność gospodarcza"
+
+#: .\models.py:24
+msgid "Permanent"
+msgstr "Umowa o pracę"
+
+#: .\models.py:25
+msgid "Contract"
+msgstr "Kontrakt"
+
+#: .\models.py:28
+msgid "Created"
+msgstr "Utworzono"
+
+#: .\models.py:29
+msgid "Application sent"
+msgstr "Wysłano aplikację"
+
+#: .\models.py:30
+msgid "Active"
+msgstr "Aktywny"
+
+#: .\models.py:31
+msgid "Positive response"
+msgstr "Odpowiedź pozytywna"
+
+#: .\models.py:32
+msgid "Contract signed"
+msgstr "Umowa podpisana"
+
+#: .\models.py:33
+msgid "Negative response"
+msgstr "Odpowiedź negatywna"
+
+#: .\models.py:34
+msgid "Declined"
+msgstr "Odmowa"
+
+#: .\models.py:37
+msgid "Not provided"
+msgstr "Nie podano"
+
+#: .\models.py:38
+msgid "Junior"
+msgstr ""
+
+#: .\models.py:39
+msgid "Regular"
+msgstr ""
+
+#: .\models.py:40
+msgid "Senior"
+msgstr ""
+
+#: .\models.py:42
+msgid "title"
+msgstr "tytuł"
+
+#: .\models.py:43
+msgid "skills required"
+msgstr "wymagane umiejętności"
+
+#: .\models.py:44
+msgid "skills optional"
+msgstr "opcjonalne umiejętności"
+
+#: .\models.py:45
+msgid "earnings max"
+msgstr "zarobki do"
+
+#: .\models.py:46
+msgid "earnings min"
+msgstr "zarobki od"
+
+#: .\models.py:48
+msgid "preferred employment type"
+msgstr "rodzaj zatrudnienia"
+
+#: .\models.py:54
+msgid "experience level"
+msgstr "poziom doświadczenia"
+
+#: .\models.py:60
+msgid "application sent date and time"
+msgstr "data i czas wysyłki aplikacji"
+
+#: .\models.py:61
+msgid "remote"
+msgstr "zdalnie"
+
+#: .\models.py:62
+msgid "location"
+msgstr "lokalizacja"
+
+#: .\models.py:63
+msgid "description"
+msgstr "opis"
+
+#: .\models.py:74
+msgid "step name"
+msgstr "nazwa kroku"
+
+#: .\models.py:77
+msgid "recruitment step"
+msgstr "krok rekrutacyjny"
+
+#: .\models.py:78
+msgid "recruitment steps"
+msgstr "kroki rekrutacyjne"
+
+#: .\templates\main\base.html:34
+msgid "About"
+msgstr "O aplikacji"
+
+#: .\templates\main\base.html:40
+msgid "Logout"
+msgstr "Wyloguj"
+
+#: .\templates\main\base.html:42
+msgid "Login"
+msgstr "Zaloguj"
+
+#: .\templates\main\base.html:43
+msgid "Register"
+msgstr "Zarejestruj"
+
+#: .\templates\main\error_403.html:4 .\templates\main\error_404.html:4
+#: .\templates\main\error_500.html:4
+msgid "Error"
+msgstr "Błąd"
+
+#: .\templates\main\error_403.html:4
+msgid "Access forbidden"
+msgstr "Dostęp zabroniony"
+
+#: .\templates\main\error_404.html:4
+msgid "Page has not been found"
+msgstr "Podana strona nie została znaleziona"
+
+#: .\templates\main\error_500.html:4
+msgid "We are experiencing some issues"
+msgstr "Napotkaliśmy niespodziwany błąd"

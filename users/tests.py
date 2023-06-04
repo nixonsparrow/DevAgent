@@ -1,16 +1,12 @@
-from django.test import TestCase
-from django.urls import reverse_lazy, reverse
-from django.core import mail
 from django.contrib.auth import get_user_model
+from django.core import mail
+from django.test import TestCase
+from django.urls import reverse, reverse_lazy
 
 User = get_user_model()
 
 
-USER = {
-    "name": "TestUser",
-    "pass": "TestPassword123!@#",
-    "email": "testuser@gmail.com"
-}
+USER = {"name": "TestUser", "pass": "TestPassword123!@#", "email": "testuser@gmail.com"}
 
 
 class BaseTestCase(TestCase):
@@ -18,7 +14,7 @@ class BaseTestCase(TestCase):
         self.user = User.objects.create_user(
             username=USER.get("name"),
             email=USER.get("email"),
-            password=USER.get("pass")
+            password=USER.get("pass"),
         )
 
 
@@ -70,8 +66,13 @@ class PasswordResetTestCase(BaseTestCase):
 
         # Now we can use the token to get the password change form
         response = self.client.get(reverse("password_reset_confirm", kwargs={"token": token, "uidb64": uid}))
-        self.assertRedirects(response,
-                             reverse(
-                                 "password_reset_confirm", kwargs={"token": 'set-password', 'uidb64': uid}
-                             ),
-                             status_code=302, target_status_code=200, fetch_redirect_response=True)
+        self.assertRedirects(
+            response,
+            reverse(
+                "password_reset_confirm",
+                kwargs={"token": "set-password", "uidb64": uid},
+            ),
+            status_code=302,
+            target_status_code=200,
+            fetch_redirect_response=True,
+        )

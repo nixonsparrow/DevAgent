@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from manager.views import error_404, error_403, error_500
+from manager.views import error_403, error_404, error_500
 
 urlpatterns = [
     path("", include("users.urls")),

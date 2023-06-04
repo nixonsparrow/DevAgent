@@ -1,33 +1,33 @@
 import os
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
-    PasswordResetView as DjangoPasswordResetView,
-    PasswordResetConfirmView as DjangoPasswordResetConfirmView
+    PasswordResetConfirmView as DjangoPasswordResetConfirmView,
 )
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import PasswordResetView as DjangoPasswordResetView
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
 from users.forms import UserRegisterForm
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Konto dla {username} zostało założone! Możesz się zalogować.')
-            return redirect('login')
+            username = form.cleaned_data.get("username")
+            messages.success(request, f"Konto dla {username} zostało założone! Możesz się zalogować.")
+            return redirect("login")
     else:
         form = UserRegisterForm()
 
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, "users/register.html", {"form": form})
 
 
 class PasswordResetView(DjangoPasswordResetView):
@@ -36,12 +36,12 @@ class PasswordResetView(DjangoPasswordResetView):
 
 
 class PasswordResetConfirmView(DjangoPasswordResetConfirmView):
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy("login")
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(self.form_class)
         if form.is_valid():
-            messages.success(request, 'Hasło zostało zmienione! Możesz się zalogować.')
+            messages.success(request, "Hasło zostało zmienione! Możesz się zalogować.")
         return super().post(request, *args, **kwargs)
 
 
@@ -59,9 +59,11 @@ class Profile(LoginRequiredMixin, UpdateView):
         old_image = user.image
         self.kwargs[self.pk_url_kwarg] = user.pk
         post = super().post(request, *args, **kwargs)
-        if get_object_or_404(klass=self.model, pk=self.request.user.pk).image != old_image and \
-                os.path.exists(old_image.path) and \
-                "default_profile_image.jpg" not in old_image.path:
+        if (
+            get_object_or_404(klass=self.model, pk=self.request.user.pk).image != old_image
+            and os.path.exists(old_image.path)
+            and "default_profile_image.jpg" not in old_image.path
+        ):
             os.remove(old_image.path)
         return post
 
