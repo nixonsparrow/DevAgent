@@ -1,4 +1,4 @@
-name: Test PEP8
+name: Test Quality
 
 on: [push, pull_request, workflow_dispatch]
 
