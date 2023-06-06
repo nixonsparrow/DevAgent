@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags i18n %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">
+                    {% if "Add new" in title %}
+                        {% translate "Add new offer" %}
+                    {% else %}
+                        {% translate "Update offer" %}
+                    {% endif %}
+                </legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="d-flex justify-content-around">
+                <div class="form-group">
+                    <button class="dirty-button btn" type="submit">{% translate "Submit" %}</button>
+                </div>
+                <div class="form-group">
+                    <a href="{% url 'homepage' %}">
+                        <button class="dirty-button btn btn-warning" type="button">{% translate "Cancel" %}</button>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

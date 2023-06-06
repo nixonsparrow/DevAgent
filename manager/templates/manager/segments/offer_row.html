@@ -1,0 +1,25 @@
+<tr style='background-color: {% cycle "white" "#f0f0f0" %};'>
+    <td scope="row">
+        <a href="{% url 'offer-update' offer.id %}" style="margin-left: -20px; position: absolute;">
+            <i class="fa fa-edit"></i>
+        </a>
+        <a href="{% url 'offer-detail' offer.id %}" class="dev-agent-link">
+            {{ offer.title }}
+        </a>
+    </td>
+    <td>
+        {{ offer.status_display }}
+    </td>
+    <td>
+        {{ offer.company.name }}
+    </td>
+    <td>
+        {% if offer.next_step %}
+            <a href="{% url 'step-detail' offer.next_step.id %}" class="dev-agent-link">
+                {{ offer.next_step.title }}
+            </a>
+        {% else %}
+            <span>-</span>
+        {% endif %}
+    </td>
+</tr>
