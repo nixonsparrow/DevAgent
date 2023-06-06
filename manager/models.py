@@ -63,8 +63,12 @@ class Offer(BaseManagerModel):
     )
     developer = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False)
     company = models.ForeignKey("manager.Company", on_delete=models.SET_NULL, null=True, blank=False)
-    skills_required = models.ManyToManyField("manager.Skill", verbose_name=_("skills required"), blank=False, related_name="offers_required_in")
-    skills_optional = models.ManyToManyField("manager.Skill", verbose_name=_("skills optional"), blank=True, related_name="offers_optional_in")
+    skills_required = models.ManyToManyField(
+        "manager.Skill", verbose_name=_("skills required"), blank=False, related_name="offers_required_in"
+    )
+    skills_optional = models.ManyToManyField(
+        "manager.Skill", verbose_name=_("skills optional"), blank=True, related_name="offers_optional_in"
+    )
     earnings_min = models.PositiveSmallIntegerField(_("earnings min"), default=None, null=True, blank=True)
     earnings_max = models.PositiveSmallIntegerField(_("earnings max"), default=None, null=True, blank=True)
     currency = models.CharField(_("currency"), max_length=8, default="PLN", blank=True, null=True)

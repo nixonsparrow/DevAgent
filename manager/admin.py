@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Company, Offer, RecruitmentStep, Skill
 
 
@@ -7,7 +8,17 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ["id", "developer", "title", "status", "earnings_range", "location", "company", "remote", "next_step"]
+    list_display = [
+        "id",
+        "developer",
+        "title",
+        "status",
+        "earnings_range",
+        "location",
+        "company",
+        "remote",
+        "next_step",
+    ]
 
 
 class RecruitmentStepAdmin(admin.ModelAdmin):

@@ -1,8 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 
 from manager.forms import OfferForm, RecruitmentStepForm
 from manager.models import Offer, RecruitmentStep
@@ -36,7 +42,7 @@ class OfferDetailView(LoginRequiredMixin, DetailView):
 
 class OfferListView(ListView):
     model = Offer
-    context_object_name = 'offers'
+    context_object_name = "offers"
     ordering = ["-updated_on", "-created_on"]
     extra_context = {"title": _("Offers list")}
 

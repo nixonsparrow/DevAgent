@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import DateInput, DateTimeInput
+from django.forms import DateTimeInput
 
 from manager.models import Offer, RecruitmentStep
 
