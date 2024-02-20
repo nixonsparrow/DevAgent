@@ -4,7 +4,10 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-=@_-1p98!n3epq%g+446s9oip==#0+=p^4lt%ts*%o*#*d-i&d")
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-=@_-1p98!n3epq%g+446s9oip==#0+=p^4lt%ts*%o*#*d-i&d",
+)
 
 DEBUG = False
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get("ALLOWED_HOSTS", "").split(",")]
@@ -92,7 +95,7 @@ AUTH_USER_MODEL = "users.User"
 
 # EMAIL VARIABLES
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
-EMAIL_HOST = os.environ.get("EMAIL_PORT", "")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
 EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS", "False") == "True" else False
 EMAIL_HOST_USER = os.environ.get("EMAIL_USER", "")

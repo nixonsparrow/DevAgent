@@ -5,8 +5,16 @@ from users.views import PasswordResetConfirmView, PasswordResetView, Profile, re
 
 urlpatterns = [
     path("register/", register, name="register"),
-    path("login/", LoginView.as_view(template_name="users/login.html"), name="login"),
-    path("logout/", LogoutView.as_view(template_name="users/logout.html"), name="logout"),
+    path(
+        "login/",
+        LoginView.as_view(template_name="users/login.html"),
+        name="login",
+    ),
+    path(
+        "logout/",
+        LogoutView.as_view(template_name="users/logout.html"),
+        name="logout",
+    ),
     path(
         "password-reset/",
         PasswordResetView.as_view(template_name="users/password_reset.html"),

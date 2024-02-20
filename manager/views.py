@@ -23,11 +23,21 @@ class AboutPage(TemplateView):
 
 
 def error_403(request, exception):
-    return render(request, "main/error_403.html", status=403, context={"exception": exception})
+    return render(
+        request,
+        "main/error_403.html",
+        status=403,
+        context={"exception": exception},
+    )
 
 
 def error_404(request, exception):
-    return render(request, "main/error_404.html", status=404, context={"exception": exception})
+    return render(
+        request,
+        "main/error_404.html",
+        status=404,
+        context={"exception": exception},
+    )
 
 
 def error_500(request):

@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class BaseManagerModel(models.Model):
+    """Abstract model with most common attributes and functions"""
+
     class Meta:
         abstract = True
 
@@ -20,6 +22,8 @@ class BaseManagerModel(models.Model):
 
 
 class Offer(BaseManagerModel):
+    """Main model of an offer that developer found and added to DB"""
+
     class Meta:
         verbose_name = _("offer")
         verbose_name_plural = _("offers")
@@ -64,15 +68,26 @@ class Offer(BaseManagerModel):
     developer = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False)
     company = models.ForeignKey("manager.Company", on_delete=models.SET_NULL, null=True, blank=False)
     skills_required = models.ManyToManyField(
-        "manager.Skill", verbose_name=_("skills required"), blank=False, related_name="offers_required_in"
+        "manager.Skill",
+        verbose_name=_("skills required"),
+        blank=False,
+        related_name="offers_required_in",
     )
     skills_optional = models.ManyToManyField(
-        "manager.Skill", verbose_name=_("skills optional"), blank=True, related_name="offers_optional_in"
+        "manager.Skill",
+        verbose_name=_("skills optional"),
+        blank=True,
+        related_name="offers_optional_in",
     )
     earnings_min = models.PositiveSmallIntegerField(_("earnings min"), default=None, null=True, blank=True)
     earnings_max = models.PositiveSmallIntegerField(_("earnings max"), default=None, null=True, blank=True)
     currency = models.CharField(_("currency"), max_length=8, default="PLN", blank=True, null=True)
-    application_sent_on = models.DateTimeField(_("application sent date and time"), default=None, null=True, blank=True)
+    application_sent_on = models.DateTimeField(
+        _("application sent date and time"),
+        default=None,
+        null=True,
+        blank=True,
+    )
     remote = models.BooleanField(_("remote"), default=True)
     location = models.CharField(_("location"), max_length=32, null=True, blank=True)
     description = models.TextField(_("description"), max_length=2048, null=True, blank=True)
@@ -80,14 +95,17 @@ class Offer(BaseManagerModel):
 
     @property
     def status_display(self):
+        """Finds and returns string value of status set"""
         return [status for status in self.Statuses.choices if self.status == status[0]][0][1]
 
     @property
     def next_step(self):
+        """Returns last related RecruitmentStep"""
         return self.steps.last()
 
     @property
     def earnings_range(self):
+        """Returns string range in proper format"""
         earnings = ""
         if self.earnings_min and self.earnings_max:
             earnings = f"{self.earnings_min} - {self.earnings_max}"
@@ -103,6 +121,8 @@ class Offer(BaseManagerModel):
 
 
 class RecruitmentStep(BaseManagerModel):
+    """Step Many-to-One model related to Offer"""
+
     class Statuses(models.IntegerChoices):
         CREATED = 0, _("Created")
         PLANNED = 1, _("Planned")
@@ -130,6 +150,8 @@ class RecruitmentStep(BaseManagerModel):
 
 
 class Company(BaseManagerModel):
+    """Company model that is the company offering the Job"""
+
     name = models.CharField(_("name"), max_length=64, null=False, blank=False, unique=True)
     location = models.CharField(_("location"), max_length=32, null=True, blank=True)
     website = models.CharField(_("website"), max_length=64, null=True, blank=True)
@@ -141,7 +163,11 @@ class Company(BaseManagerModel):
 
 
 class Skill(BaseManagerModel):
+    """Developer's skill"""
+
     name = models.CharField(_("name"), max_length=64, null=False, blank=False, unique=True)
+
+    # TODO should we add rating here?
 
     class Meta:
         verbose_name = _("skill")

@@ -6,7 +6,11 @@ from django.urls import reverse, reverse_lazy
 User = get_user_model()
 
 
-USER = {"name": "TestUser", "pass": "TestPassword123!@#", "email": "testuser@gmail.com"}
+USER = {
+    "name": "TestUser",
+    "pass": "TestPassword123!@#",
+    "email": "testuser@gmail.com",
+}
 
 
 class BaseTestCase(TestCase):
@@ -65,7 +69,12 @@ class PasswordResetTestCase(BaseTestCase):
         uid = response.context[0]["uid"]
 
         # Now we can use the token to get the password change form
-        response = self.client.get(reverse("password_reset_confirm", kwargs={"token": token, "uidb64": uid}))
+        response = self.client.get(
+            reverse(
+                "password_reset_confirm",
+                kwargs={"token": token, "uidb64": uid},
+            )
+        )
         self.assertRedirects(
             response,
             reverse(
