@@ -1,17 +1,27 @@
 {% extends "main/base.html" %}
-{% load crispy_forms_tags i18n %}
+{% load crispy_forms_tags i18n static %}
 {% block content %}
     <div class="content-section">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">
-                    {% if "Add new" in title %}
+                    {% if action == "create" %}
                         {% translate "Add new offer" %}
                     {% else %}
                         {% translate "Update offer" %}
                     {% endif %}
                 </legend>
+                <div class="hide" id="switcher">
+                    <div class="d-flex justify-content-around rounded mb-2">
+                        <div style="cursor: pointer;" class="p-2 rounded bg-steel" id="_company" onclick="companySwitcher('_company')">
+                            Select existing Company
+                        </div>
+                        <div style="cursor: pointer;" class="p-2 rounded" id="_new_company" onclick="companySwitcher('_new_company')">
+                            Add new company
+                        </div>
+                    </div>
+                </div>
                 {{ form|crispy }}
             </fieldset>
             <div class="d-flex justify-content-around">
@@ -27,3 +37,8 @@
         </form>
     </div>
 {% endblock content %}
+{% block extra_js %}
+{% if action == "create" %}
+    <script src="{% static 'js/offer_form.js' %}"></script>
+{% endif %}
+{% endblock extra_js %}

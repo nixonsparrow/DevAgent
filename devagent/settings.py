@@ -107,6 +107,10 @@ AUTH_PASSWORD_AGE = int(os.environ.get("AUTH_PASSWORD_AGE", "7"))
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
+# AUTO CREATED USERS PASSWORDS
+ADMIN_PASS = os.environ.get("ADMIN_PASS", "admin")
+AUTOMAT_PASS = os.environ.get("AUTOMAT_PASS", "automat")
+
 # store sensitive data in env variables or overwrite in local.py file - check examples in local_example.py file
 try:
     from .local import *  # noqa: F401 F403 NOSONAR

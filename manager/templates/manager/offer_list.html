@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
     <h1 class="mb-3 text-center">{% translate 'Your offers' %}</h1>
-    <table class="container m-2 tictactoe-table table text-center">
+    <table class="container m-2 table text-center">
         {% include "manager/segments/offer_row_header.html" %}
         {% for offer in offers %}
             {% include "manager/segments/offer_row.html" %}

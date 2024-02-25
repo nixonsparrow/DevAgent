@@ -17,12 +17,12 @@ class OfferAdmin(admin.ModelAdmin):
         "location",
         "company",
         "remote",
-        "next_step",
+        "latest_step",
     ]
 
 
 class RecruitmentStepAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "offer", "status", "scheduled_on"]
+    list_display = ["id", "offer", "status", "scheduled_on"]
 
 
 class SkillAdmin(admin.ModelAdmin):

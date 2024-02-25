@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 
@@ -16,6 +17,7 @@ class BaseManagerModel(models.Model):
             return self.name
         elif hasattr(self, "title"):
             return self.title
+        return super().__str__()
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.__str__()}')"
@@ -99,9 +101,9 @@ class Offer(BaseManagerModel):
         return [status for status in self.Statuses.choices if self.status == status[0]][0][1]
 
     @property
-    def next_step(self):
-        """Returns last related RecruitmentStep"""
-        return self.steps.last()
+    def latest_step(self):
+        """Returns latest related RecruitmentStep"""
+        return self.steps.order_by("id").last()
 
     @property
     def earnings_range(self):
@@ -120,6 +122,13 @@ class Offer(BaseManagerModel):
         return earnings or "-"
 
 
+class StepType(BaseManagerModel):
+    """Model for creation of individual step types for each User"""
+
+    name = models.CharField(_("name"), max_length=32, null=False, blank=False)
+    added_by = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="step_types_added")
+
+
 class RecruitmentStep(BaseManagerModel):
     """Step Many-to-One model related to Offer"""
 
@@ -131,7 +140,7 @@ class RecruitmentStep(BaseManagerModel):
         NEGATIVE = -1, _("Negative response")
         RESIGNED = -2, _("Resigned")
 
-    title = models.CharField(_("title"), max_length=64, null=False, blank=False)
+    type = models.ForeignKey("manager.StepType", on_delete=models.SET_NULL, null=True, blank=False)
     offer = models.ForeignKey(
         "manager.Offer",
         on_delete=models.CASCADE,
@@ -148,6 +157,13 @@ class RecruitmentStep(BaseManagerModel):
         verbose_name_plural = _("recruitment steps")
         ordering = ["-updated_on", "-created_on"]
 
+    @property
+    def has_result(self):
+        """Returns True if current status is considered final result"""
+        if self.status in [self.Statuses.CREATED, self.Statuses.PLANNED, self.Statuses.FINISHED]:
+            return False
+        return True
+
 
 class Company(BaseManagerModel):
     """Company model that is the company offering the Job"""
@@ -155,11 +171,19 @@ class Company(BaseManagerModel):
     name = models.CharField(_("name"), max_length=64, null=False, blank=False, unique=True)
     location = models.CharField(_("location"), max_length=32, null=True, blank=True)
     website = models.CharField(_("website"), max_length=64, null=True, blank=True)
+    added_by = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="companies_added")
 
     class Meta:
         verbose_name = _("company")
         verbose_name_plural = _("companies")
         ordering = ["name"]
+        constraints = [
+            UniqueConstraint(
+                fields = ["name",
+                "added_by"],
+                name='company per user unique',
+            ),
+        ]
 
 
 class Skill(BaseManagerModel):

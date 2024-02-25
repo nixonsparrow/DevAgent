@@ -80,3 +80,7 @@ a.article-title:hover {
   text-decoration: none;
   color: black;
 }
+
+.hide {
+  display: none;
+}

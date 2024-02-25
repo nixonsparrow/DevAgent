@@ -6,3 +6,6 @@ class ManagerConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "manager"
     verbose_name = _("Manager")
+
+    def ready(self):
+        import manager.signals
