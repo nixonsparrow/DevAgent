@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateTimeInput
 
-from manager.models import Offer, RecruitmentStep, Company
+from manager.models import Company, Offer, RecruitmentStep
 
 
 class OfferCreateForm(forms.ModelForm):
@@ -17,15 +17,17 @@ class OfferCreateForm(forms.ModelForm):
         fields = "__all__"
         exclude = ["status", "developer", "application_sent_on"]
 
-    field_order = ['company', 'new_company', "title"]
-    
+    field_order = ["company", "new_company", "title"]
+
     def clean(self):
         cleaned_data = super().clean()
         if "new_company" in cleaned_data.keys():
-            cleaned_data.update({"company": Company.objects.create(name=cleaned_data.get("new_company"), added_by=self.request_user)})
-            self.errors.pop('company', None)
+            cleaned_data.update(
+                {"company": Company.objects.create(name=cleaned_data.get("new_company"), added_by=self.request_user)}
+            )
+            self.errors.pop("company", None)
         elif "company" in cleaned_data.keys():
-            self.errors.pop('new_company', None)
+            self.errors.pop("new_company", None)
         return cleaned_data
 
 
@@ -35,7 +37,7 @@ class OfferUpdateForm(forms.ModelForm):
         fields = "__all__"
         exclude = ["developer", "application_sent_on"]
 
-    field_order = ['company', "title"]
+    field_order = ["company", "title"]
 
 
 class RecruitmentStepForm(forms.ModelForm):

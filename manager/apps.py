@@ -8,4 +8,4 @@ class ManagerConfig(AppConfig):
     verbose_name = _("Manager")
 
     def ready(self):
-        import manager.signals
+        import manager.signals  # noqa

@@ -126,7 +126,9 @@ class StepType(BaseManagerModel):
     """Model for creation of individual step types for each User"""
 
     name = models.CharField(_("name"), max_length=32, null=False, blank=False)
-    added_by = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="step_types_added")
+    added_by = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="step_types_added"
+    )
 
 
 class RecruitmentStep(BaseManagerModel):
@@ -171,7 +173,9 @@ class Company(BaseManagerModel):
     name = models.CharField(_("name"), max_length=64, null=False, blank=False, unique=True)
     location = models.CharField(_("location"), max_length=32, null=True, blank=True)
     website = models.CharField(_("website"), max_length=64, null=True, blank=True)
-    added_by = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="companies_added")
+    added_by = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, null=False, blank=False, related_name="companies_added"
+    )
 
     class Meta:
         verbose_name = _("company")
@@ -179,9 +183,8 @@ class Company(BaseManagerModel):
         ordering = ["name"]
         constraints = [
             UniqueConstraint(
-                fields = ["name",
-                "added_by"],
-                name='company per user unique',
+                fields=["name", "added_by"],
+                name="company per user unique",
             ),
         ]
 

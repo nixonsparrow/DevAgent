@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -72,7 +72,7 @@ class OfferCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({'request_user': self.request.user})
+        kwargs.update({"request_user": self.request.user})
         return kwargs
 
     def form_valid(self, form):
@@ -200,7 +200,7 @@ class RecruitmentStepChangeStatusBaseView(LoginRequiredMixin, UserPassesTestMixi
 
 
 class RecruitmentStepFinishView(RecruitmentStepChangeStatusBaseView):
-    statuses_from = (RecruitmentStep.Statuses.PLANNED, )
+    statuses_from = (RecruitmentStep.Statuses.PLANNED,)
     status_to = RecruitmentStep.Statuses.FINISHED
 
 
