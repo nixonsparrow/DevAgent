@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse, reverse_lazy
 
-from .models import Offer, RecruitmentStep, StepType
-from .views import RecruitmentStepCreateView, RecruitmentStepUpdateView
+from .models import Offer, RecruitmentStep, StepType, Company
+from .views import RecruitmentStepCreateView, RecruitmentStepUpdateView, OfferCreateView
 
 User = get_user_model()
 
@@ -36,13 +36,14 @@ class AboutPageTestCase(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
 
-class RecruitmentStepTestingBase:
+class TestingBase:
     def setUp(self):
         self.client = Client()
 
         self.password = "VeryLongAndS3CUREPa$$word!23"
         self.user = User.objects.create_user(username="test_user", email="test@dev.dev", password=self.password)
         self.offer = Offer.objects.create(title="Test Offer", developer=self.user)
+        self.company = Company.objects.create(name="Test company", added_by=self.user)
         self.step = RecruitmentStep.objects.create(offer=self.offer)
 
         self.password2 = "OtherLongAndS3CUREPa$$word!@"
@@ -58,7 +59,33 @@ class RecruitmentStepTestingBase:
         self.assertTrue(user_is_logged)
 
 
-class RecruitmentStepCreateViewTestCase(RecruitmentStepTestingBase, TestCase):
+class OfferCreateViewTestCase(TestingBase, TestCase):
+    def test_create_view_with_not_authenticated_user(self):
+        response = self.client.get(reverse("offer-create"))
+        self.assertEqual(response.status_code, 302)
+
+    def test_create_view_with_authenticated_user_and_owner_of_offer(self):
+        self.log_user()
+        response = self.client.get(reverse("offer-create"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_form_valid(self):
+        self.log_user()
+        response = self.client.post(
+            reverse("offer-create"),
+            data={"title": "New test offer", "company": self.company.id},
+        )
+        self.assertEqual(response.status_code, 302)
+        offer = Offer.objects.latest("id")
+        self.assertEqual(offer.title, "New test offer")
+
+    def test_get_success_url(self):
+        view = OfferCreateView()
+        view.object = Offer.objects.create(title="New test offer", company=self.company, developer=self.user)
+        self.assertEqual(view.get_success_url(), reverse("offer-list"))
+
+
+class RecruitmentStepCreateViewTestCase(TestingBase, TestCase):
     def test_create_view_with_not_authenticated_user(self):
         response = self.client.get(reverse("step-create", kwargs={"offer_id": self.offer.id}))
         self.assertEqual(response.status_code, 302)
@@ -89,7 +116,7 @@ class RecruitmentStepCreateViewTestCase(RecruitmentStepTestingBase, TestCase):
         self.assertEqual(view.get_success_url(), reverse("offer-list"))
 
 
-class RecruitmentStepUpdateViewTestCase(RecruitmentStepTestingBase, TestCase):
+class RecruitmentStepUpdateViewTestCase(TestingBase, TestCase):
 
     def test_update_view_with_not_authenticated_user(self):
         response = self.client.get(reverse("step-update", kwargs={"pk": self.step.id}))

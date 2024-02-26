@@ -59,20 +59,21 @@ class Offer(BaseManagerModel):
         choices=EmploymentTypes.choices,
         max_length=16,
         null=True,
+        blank=True,
     )
     level = models.PositiveSmallIntegerField(
         _("experience level"),
         default=ExperienceLevels.NONE,
         choices=ExperienceLevels.choices,
         null=False,
-        blank=False,
+        blank=True,
     )
     developer = models.ForeignKey("users.User", on_delete=models.CASCADE, null=False, blank=False)
     company = models.ForeignKey("manager.Company", on_delete=models.SET_NULL, null=True, blank=False)
     skills_required = models.ManyToManyField(
         "manager.Skill",
         verbose_name=_("skills required"),
-        blank=False,
+        blank=True,
         related_name="offers_required_in",
     )
     skills_optional = models.ManyToManyField(
