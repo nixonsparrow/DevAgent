@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse, reverse_lazy
 
-from .models import Offer, RecruitmentStep
-from .views import RecruitmentStepCreateView
+from .models import Offer, RecruitmentStep, StepType
+from .views import RecruitmentStepCreateView, RecruitmentStepUpdateView
 
 User = get_user_model()
 
@@ -36,16 +36,19 @@ class AboutPageTestCase(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
 
-class RecruitmentStepCreateViewTestCase(TestCase):
+class RecruitmentStepTestingBase:
     def setUp(self):
         self.client = Client()
 
         self.password = "VeryLongAndS3CUREPa$$word!23"
         self.user = User.objects.create_user(username="test_user", email="test@dev.dev", password=self.password)
         self.offer = Offer.objects.create(title="Test Offer", developer=self.user)
+        self.step = RecruitmentStep.objects.create(offer=self.offer)
 
         self.password2 = "OtherLongAndS3CUREPa$$word!@"
         self.other_user = User.objects.create_user(username="user2", email="t35t@dev.dev", password=self.password2)
+
+        self.step_type = StepType.objects.create(name="Test type", added_by=self.user)
 
     def log_user(self, email=None, password=None):
         user_is_logged = self.client.login(
@@ -53,6 +56,12 @@ class RecruitmentStepCreateViewTestCase(TestCase):
             password=password or self.password,
         )
         self.assertTrue(user_is_logged)
+
+
+class RecruitmentStepCreateViewTestCase(RecruitmentStepTestingBase, TestCase):
+    def test_create_view_with_not_authenticated_user(self):
+        response = self.client.get(reverse("step-create", kwargs={"offer_id": self.offer.id}))
+        self.assertEqual(response.status_code, 302)
 
     def test_create_view_with_authenticated_user_and_owner_of_offer(self):
         self.log_user()
@@ -68,16 +77,45 @@ class RecruitmentStepCreateViewTestCase(TestCase):
         self.log_user()
         response = self.client.post(
             reverse("step-create", kwargs={"offer_id": self.offer.id}),
-            {"title": "Test Step"},
+            data={"type": self.step_type.id, "offer_id": self.offer.id},
         )
         self.assertEqual(response.status_code, 302)
         step = RecruitmentStep.objects.latest("id")
-        self.assertEqual(step.title, "Test Step")
+        self.assertEqual(step.type, self.step_type)
 
     def test_get_success_url(self):
         view = RecruitmentStepCreateView()
         view.object = RecruitmentStep.objects.create(offer=self.offer)
-        self.assertEqual(
-            view.get_success_url(),
-            reverse("step-update", kwargs={"pk": view.object.id}),
+        self.assertEqual(view.get_success_url(), reverse("offer-list"))
+
+
+class RecruitmentStepUpdateViewTestCase(RecruitmentStepTestingBase, TestCase):
+
+    def test_update_view_with_not_authenticated_user(self):
+        response = self.client.get(reverse("step-update", kwargs={"pk": self.step.id}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_update_view_with_authenticated_user_and_owner_of_offer(self):
+        self.log_user()
+        response = self.client.get(reverse("step-update", kwargs={"pk": self.step.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_view_with_authenticated_user_and_not_owner_of_offer(self):
+        self.log_user(email=self.other_user.email, password=self.password2)
+        response = self.client.get(reverse("step-update", kwargs={"pk": self.step.id}))
+        self.assertEqual(response.status_code, 403)
+
+    def test_form_valid(self):
+        self.log_user()
+        response = self.client.post(
+            reverse("step-update", kwargs={"pk": self.step.id}),
+            data={"type": self.step_type.id},
         )
+        self.assertEqual(response.status_code, 302)
+        step = RecruitmentStep.objects.latest("id")
+        self.assertEqual(step.type, self.step_type)
+
+    def test_get_success_url(self):
+        view = RecruitmentStepUpdateView()
+        view.object = self.step
+        self.assertEqual(view.get_success_url(), reverse("offer-list"))
