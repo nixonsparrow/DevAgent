@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse, reverse_lazy
 
-from .models import Offer, RecruitmentStep, StepType, Company
-from .views import RecruitmentStepCreateView, RecruitmentStepUpdateView, OfferCreateView
+from .models import Company, Offer, RecruitmentStep, StepType
+from .views import OfferCreateView, RecruitmentStepCreateView, RecruitmentStepUpdateView
 
 User = get_user_model()
 
