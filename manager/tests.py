@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 
 from .models import Company, Offer, RecruitmentStep, StepType
 from .views import OfferCreateView, RecruitmentStepCreateView, RecruitmentStepUpdateView
@@ -117,7 +118,6 @@ class RecruitmentStepCreateViewTestCase(TestingBase, TestCase):
 
 
 class RecruitmentStepUpdateViewTestCase(TestingBase, TestCase):
-
     def test_update_view_with_not_authenticated_user(self):
         response = self.client.get(reverse("step-update", kwargs={"pk": self.step.id}))
         self.assertEqual(response.status_code, 302)
@@ -146,3 +146,70 @@ class RecruitmentStepUpdateViewTestCase(TestingBase, TestCase):
         view = RecruitmentStepUpdateView()
         view.object = self.step
         self.assertEqual(view.get_success_url(), reverse("offer-list"))
+
+
+class RecruitmentStepChangeStatusViewsTestCase(TestingBase, TestCase):
+    def set_planned(self):
+        self.step.status = self.step.Statuses.PLANNED
+        self.step.save()
+
+    def test_signal_setting_status_to_planned_after_creating(self):
+        new_step = RecruitmentStep.objects.create(offer=self.offer, scheduled_on=timezone.now() + timezone.timedelta(days=1))
+        self.assertEqual(new_step.status, RecruitmentStep.Statuses.PLANNED)
+
+    def test_signal_changing_status_to_planned_after_scheduling(self):
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.CREATED)
+        self.step.scheduled_on = timezone.now() + timezone.timedelta(days=1)
+        self.step.save()
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.PLANNED)
+
+    def test_change_status_unauthorised_user(self):
+        self.set_planned()
+        self.client.get(
+            reverse("step-finish", kwargs={"pk": self.step.id})
+        )
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.PLANNED)
+
+    def test_change_status_user_that_is_not_offer_developer(self):
+        self.set_planned()
+        self.log_user()
+        self.client.get(
+            reverse("step-finish", kwargs={"pk": self.step.id})
+        )
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.PLANNED)
+
+    def test_change_status_finish_step(self):
+        self.set_planned()
+        self.log_user(email=self.other_user.email, password=self.password2)
+        self.client.get(
+            reverse("step-finish", kwargs={"pk": self.step.id})
+        )
+        self.step.refresh_from_db()
+        self.assertNotEqual(self.step.status, RecruitmentStep.Statuses.FINISHED)
+
+    def test_change_status_accept_step(self):
+        self.set_planned()
+        self.log_user()
+        self.client.get(
+            reverse("step-accept", kwargs={"pk": self.step.id})
+        )
+        self.step.refresh_from_db()
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.SUCCESS)
+
+    def test_change_status_reject_step(self):
+        self.set_planned()
+        self.log_user()
+        self.client.get(
+            reverse("step-reject", kwargs={"pk": self.step.id})
+        )
+        self.step.refresh_from_db()
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.NEGATIVE)
+
+    def test_change_status_resign_step(self):
+        self.set_planned()
+        self.log_user()
+        self.client.get(
+            reverse("step-resign", kwargs={"pk": self.step.id})
+        )
+        self.step.refresh_from_db()
+        self.assertEqual(self.step.status, RecruitmentStep.Statuses.RESIGNED)
