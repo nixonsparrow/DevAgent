@@ -64,6 +64,9 @@ class OfferListView(LoginRequiredMixin, ListView):
     ordering = ["-updated_on", "-created_on"]
     extra_context = {"title": _("Offers list")}
 
+    def get_queryset(self):
+        return self.model.objects.filter(developer=self.request.user)
+
 
 class OfferCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Offer
@@ -107,7 +110,7 @@ class OfferSendView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         offer = self.get_object()
-        if self.request.user == offer.developer:
+        if self.request.user == offer.developer and offer.status == Offer.Statuses.CREATED:
             return True
         return False
 
