@@ -95,8 +95,8 @@ class OfferUpdateViewTestCase(TestingBase, TestCase):
             },
         )
         self.assertEqual(response.status_code, 302)
-        offer = Offer.objects.latest("id")
-        self.assertEqual(offer.title, new_title)
+        self.offer.refresh_from_db()
+        self.assertEqual(self.offer.title, new_title)
 
     def test_get_success_url(self):
         view = OfferUpdateView()
@@ -106,17 +106,17 @@ class OfferUpdateViewTestCase(TestingBase, TestCase):
 
 class OfferSendViewTestCase(TestingBase, TestCase):
     def test_send_view_with_not_authenticated_user(self):
-        response = self.client.get(reverse_lazy("offer-send", kwargs={"pk": self.offer.id}))
+        response = self.client.get(reverse_lazy("offer-send", kwargs={"pk": self.offer_clean.id}))
         self.assertEqual(response.status_code, 302)
-        self.offer.refresh_from_db()
-        self.assertEqual(self.offer.status, Offer.Statuses.CREATED)
+        self.offer_clean.refresh_from_db()
+        self.assertEqual(self.offer_clean.status, Offer.Statuses.CREATED)
 
     def test_send_view_with_authenticated_user_and_owner_of_offer(self):
         self.log_user()
-        response = self.client.get(reverse_lazy("offer-send", kwargs={"pk": self.offer.id}))
+        response = self.client.get(reverse_lazy("offer-send", kwargs={"pk": self.offer_clean.id}))
         self.assertEqual(response.status_code, 302)
-        self.offer.refresh_from_db()
-        self.assertEqual(self.offer.status, Offer.Statuses.APPLICATION_SENT)
+        self.offer_clean.refresh_from_db()
+        self.assertEqual(self.offer_clean.status, Offer.Statuses.APPLICATION_SENT)
 
     def test_send_view_with_authenticated_user_and_not_owner_of_offer(self):
         self.log_user(email=self.other_user.email, password=self.password2)
@@ -125,12 +125,12 @@ class OfferSendViewTestCase(TestingBase, TestCase):
 
     def test_offer_status_change_to_sent(self):
         self.log_user()
-        self.assertEqual(self.offer.status, Offer.Statuses.CREATED)
+        self.assertEqual(self.offer_clean.status, Offer.Statuses.CREATED)
         self.client.get(
-            reverse_lazy("offer-send", kwargs={"pk": self.offer.id}),
+            reverse_lazy("offer-send", kwargs={"pk": self.offer_clean.id}),
         )
-        self.offer.refresh_from_db()
-        self.assertEqual(self.offer.status, Offer.Statuses.APPLICATION_SENT)
+        self.offer_clean.refresh_from_db()
+        self.assertEqual(self.offer_clean.status, Offer.Statuses.APPLICATION_SENT)
 
     def test_offer_status_not_change_to_sent_from_any_other_status(self):
         self.log_user()

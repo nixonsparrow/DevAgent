@@ -14,6 +14,7 @@ class TestingBase:
         self.user = User.objects.create_user(username="test_user", email="test@dev.dev", password=self.password)
         self.company = Company.objects.create(name="Test company", added_by=self.user)
         self.offer = Offer.objects.create(title="Test Offer", developer=self.user, company=self.company)
+        self.offer_clean = Offer.objects.create(title="Test Offer Clean", developer=self.user, company=self.company)
         self.step = RecruitmentStep.objects.create(offer=self.offer)
 
         self.password2 = "OtherLongAndS3CUREPa$$word!@"

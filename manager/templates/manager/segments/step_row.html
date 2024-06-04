@@ -1,0 +1,22 @@
+{% load i18n %}
+<tr style='background-color: {% cycle "white" "#f0f0f0" %};'>
+    <td scope="row">
+        <a href="{% url 'step-update' step.id %}" style="position: absolute;">
+            <i class="fa fa-edit"></i>
+        </a>
+    </td>
+    <td>
+        <a href="#" class="dev-agent-link">
+            {{ step.type }}
+        </a>
+    </td>
+    <td>
+        {{ step.status }}
+    </td>
+    <td>
+        {{ step.scheduled_on }}
+    </td>
+    <td>
+        {{ step.description }}
+    </td>
+</tr>

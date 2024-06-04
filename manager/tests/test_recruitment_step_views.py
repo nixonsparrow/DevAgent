@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from manager.models import RecruitmentStep, StepType
+from manager.models import Offer, RecruitmentStep, StepType
 from manager.tests import TestingBase
 from manager.views import RecruitmentStepCreateView, RecruitmentStepUpdateView
 
@@ -30,6 +30,16 @@ class RecruitmentStepCreateViewTestCase(TestingBase, TestCase):
         self.assertEqual(response.status_code, 302)
         step = RecruitmentStep.objects.latest("id")
         self.assertEqual(step.type, self.step_type)
+
+    def test_offer_status_change(self):
+        self.log_user()
+        self.assertNotEqual(self.offer_clean.status, Offer.Statuses.ACTIVE)
+        self.client.post(
+            reverse("step-create", kwargs={"offer_id": self.offer_clean.id}),
+            data={"type": self.step_type.id, "offer_id": self.offer_clean.id},
+        )
+        self.offer_clean.refresh_from_db()
+        self.assertEqual(self.offer_clean.status, Offer.Statuses.ACTIVE)
 
     def test_get_success_url(self):
         view = RecruitmentStepCreateView()
