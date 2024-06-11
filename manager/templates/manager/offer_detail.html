@@ -2,13 +2,21 @@
 {% load i18n %}
 {% block content %}
     <div class="content-section">
-        <h1 class="mb-3">{% translate 'Offer' %} ({{ offer.id }}): {{ offer.title }} ({{ offer.company }})</h1>
+        <h1 class="mb-3">{{ offer.id }}. {% translate 'Offer' %}: {{ offer.title }} | {{ offer.company }}</h1>
         <h4>{% translate 'Status' %}: <b>{{ offer.status_display }}</b></h4>
 
         <h1 class="mb-3 text-center">{% translate 'Current step' %}</h1>
         <table class="container m-2 table text-center">
             {% include "manager/segments/step_row_header.html" %}
             {% include "manager/segments/step_row.html" with step=offer.latest_step %}
+        </table>
+
+        <h1 class="mb-3 text-center">{% translate 'All steps' %}</h1>
+        <table class="container m-2 table text-center">
+            {% include "manager/segments/step_row_header.html" %}
+            {% for step in offer.steps.all %}
+                {% include "manager/segments/step_row.html" %}
+            {% endfor %}
         </table>
 
     </div>

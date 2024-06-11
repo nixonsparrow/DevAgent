@@ -1,0 +1,23 @@
+{% load i18n %}
+<tr style='background-color: {% cycle "white" "#f0f0f0" %};'>
+    <td scope="row">
+        <a href="{% url 'company-update' company.id %}" style="position: absolute;">
+            <i class="fa fa-edit"></i>
+        </a>
+    </td>
+    <td>
+        {{ company.name }}
+    </td>
+    <td>
+        {{ company.location|default:"-" }}
+    </td>
+    <td>
+        {% if company.website %}
+            <a href="https://{{ company.website }}" target="_blank">
+                {{ company.website }}
+            </a>
+        {% else %}
+            -
+        {% endif %}
+    </td>
+</tr>

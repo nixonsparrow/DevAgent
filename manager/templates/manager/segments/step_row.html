@@ -11,12 +11,12 @@
         </a>
     </td>
     <td>
-        {{ step.status }}
+        {{ step.status_display }}
     </td>
     <td>
-        {{ step.scheduled_on }}
+        {{ step.scheduled_on|default:"-" }}
     </td>
     <td>
-        {{ step.description }}
+        {{ step.description|default:"-" }}
     </td>
 </tr>

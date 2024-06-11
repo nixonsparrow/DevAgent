@@ -7,9 +7,9 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">
                     {% if action == "create" %}
-                        {% translate "Add new offer" %}
+                        {% translate "Add new company" %}
                     {% else %}
-                        {% translate "Update offer" %}
+                        {% translate "Update company" %}
                     {% endif %}
                 </legend>
                 <div class="hide" id="switcher">
@@ -29,7 +29,7 @@
                     <button class="btn btn-success" type="submit">{% translate "Submit" %}</button>
                 </div>
                 <div class="form-group">
-                    <a href="{% url 'homepage' %}">
+                    <a href="{% url 'company-list' %}">
                         <button class="btn btn-warning" type="button">{% translate "Cancel" %}</button>
                     </a>
                 </div>

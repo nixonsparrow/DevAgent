@@ -40,6 +40,13 @@ class OfferUpdateForm(forms.ModelForm):
     field_order = ["company", "title"]
 
 
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = "__all__"
+        exclude = ["added_by"]
+
+
 class RecruitmentStepForm(forms.ModelForm):
     class Meta:
         model = RecruitmentStep

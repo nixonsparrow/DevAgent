@@ -36,23 +36,6 @@
         {% endif %}
     </td>
     <td>
-        {% if offer.status == offer.Statuses.CREATED %}
-            <a href="{% url 'offer-send' offer.id %}"><button class="btn btn-sm btn-info">{% translate "Send Offer" %}</button></a>
-        {% else %}
-            {% if offer.latest_step and not offer.latest_step.has_result %}
-                {% if offer.latest_step.status == offer.latest_step.Statuses.CREATED %}
-                    <a href="{% url 'step-update' offer.latest_step.id %}"><button class="btn btn-sm btn-info">{% translate "Plan" %}</button></a>
-                {% elif offer.latest_step.status == offer.latest_step.Statuses.PLANNED %}
-                    <a href="{% url 'step-finish' offer.latest_step.id %}"><button class="btn btn-sm">{% translate "Finish" %}</button></a>
-                {% endif %}
-                {% if offer.latest_step.status == offer.latest_step.Statuses.FINISHED or offer.latest_step.status == offer.latest_step.Statuses.PLANNED %}
-                    <a href="{% url 'step-accept' offer.latest_step.id %}"><button class="btn btn-sm btn-success">{% translate "Accept" %}</button></a>
-                    <a href="{% url 'step-reject' offer.latest_step.id %}"><button class="btn btn-sm btn-warning">{% translate "Reject" %}</button></a>
-                {% endif %}
-                    <a href="{% url 'step-resign' offer.latest_step.id %}"><button class="btn btn-sm btn-danger">{% translate "Resign" %}</button></a>
-            {% else %}
-                <a href="{% url 'step-create' offer.id %}"><button class="btn btn-sm btn-secondary">{% translate "New" %}</button></a>
-            {% endif %}
-        {% endif %}
+        {% include "manager/segments/offer_nav_buttons.html" %}
     </td>
 </tr>

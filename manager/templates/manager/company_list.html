@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% load i18n %}
+{% block content %}
+    <h1 class="mb-3 text-center">{% translate 'Companies' %}</h1>
+    <table class="container m-2 table text-center">
+        {% include "manager/segments/company_row_header.html" %}
+        {% for company in companies %}
+            {% include "manager/segments/company_row.html" %}
+        {% endfor %}
+    </table>
+
+{% endblock content %}

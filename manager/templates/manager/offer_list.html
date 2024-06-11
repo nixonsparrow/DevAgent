@@ -9,4 +9,12 @@
         {% endfor %}
     </table>
 
+    <h1 class="mb-3 text-center">{% translate 'Archive offers' %}</h1>
+    <table class="container m-2 table text-center">
+        {% include "manager/segments/offer_row_header.html" %}
+        {% for offer in archived %}
+            {% include "manager/segments/offer_row.html" %}
+        {% endfor %}
+    </table>
+
 {% endblock content %}

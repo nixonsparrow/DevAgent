@@ -12,7 +12,7 @@ def change_status_to_planned_if_scheduled(sender, instance, **kwargs):
 
 @receiver(post_save, sender=RecruitmentStep)
 def change_offer_status(sender, instance, **kwargs):
-    if instance.status == RecruitmentStep.Statuses.CREATED and instance.offer.status in [
+    if instance.status in [RecruitmentStep.Statuses.CREATED, RecruitmentStep.Statuses.PLANNED] and instance.offer.status in [
         Offer.Statuses.CREATED,
         Offer.Statuses.APPLICATION_SENT,
     ]:
@@ -26,3 +26,11 @@ def change_offer_status(sender, instance, **kwargs):
     if instance.status == RecruitmentStep.Statuses.RESIGNED and instance.offer.status != Offer.Statuses.RESIGNED:
         instance.offer.status = Offer.Statuses.RESIGNED
         instance.offer.save()
+
+
+@receiver(post_save, sender=Offer)
+def offer_resign_update_last_step_status(sender, instance, **kwargs):
+    if instance.status == Offer.Statuses.RESIGNED and instance.latest_step and instance.latest_step.status in (RecruitmentStep.Statuses.CREATED, RecruitmentStep.Statuses.PLANNED, RecruitmentStep.Statuses.FINISHED):
+        latest_step = instance.latest_step
+        latest_step.status = RecruitmentStep.Statuses.RESIGNED
+        latest_step.save(update_fields=["status", "updated_on"])

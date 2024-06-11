@@ -39,6 +39,10 @@ class Offer(BaseManagerModel):
         NEGATIVE = -1, _("Negative response")
         RESIGNED = -2, _("Resigned")
 
+    @classmethod
+    def statuses_active(cls):
+        return [cls.Statuses.CREATED, cls.Statuses.APPLICATION_SENT, cls.Statuses.ACTIVE]
+
     class EmploymentTypes(models.TextChoices):
         NONE = None, _("None")
         B2B = "B2B", _("Business to business")
@@ -122,6 +126,13 @@ class Offer(BaseManagerModel):
 
         return earnings or "-"
 
+    @property
+    def is_finished(self):
+        """Returns True if status is final"""
+        if self.status < self.Statuses.CREATED or self.status >= self.Statuses.CONTRACT_SIGNED:
+            return True
+        return False
+
 
 class StepType(BaseManagerModel):
     """Model for creation of individual step types for each User"""
@@ -159,6 +170,11 @@ class RecruitmentStep(BaseManagerModel):
         verbose_name = _("recruitment step")
         verbose_name_plural = _("recruitment steps")
         ordering = ["-updated_on", "-created_on"]
+
+    @property
+    def status_display(self):
+        """Finds and returns string value of status set"""
+        return [status for status in self.Statuses.choices if self.status == status[0]][0][1]
 
     @property
     def has_result(self):
