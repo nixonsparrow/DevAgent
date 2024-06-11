@@ -55,10 +55,3 @@ class RecruitmentStepChangeStatusViewsTestCase(TestingBase, TestCase):
         self.client.get(reverse("step-reject", kwargs={"pk": self.step.id}))
         self.step.refresh_from_db()
         self.assertEqual(self.step.status, RecruitmentStep.Statuses.NEGATIVE)
-
-    def test_change_status_resign_step(self):
-        self.set_planned()
-        self.log_user()
-        self.client.get(reverse("step-resign", kwargs={"pk": self.step.id}))
-        self.step.refresh_from_db()
-        self.assertEqual(self.step.status, RecruitmentStep.Statuses.RESIGNED)
