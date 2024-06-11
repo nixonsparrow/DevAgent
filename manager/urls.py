@@ -64,5 +64,5 @@ urlpatterns = [
         "offers/steps/<int:pk>/reject",
         views.RecruitmentStepRejectView.as_view(),
         name="step-reject",
-    )
+    ),
 ]

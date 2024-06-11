@@ -12,8 +12,13 @@ from django.views.generic import (
     UpdateView,
 )
 
-from manager.forms import OfferCreateForm, OfferUpdateForm, RecruitmentStepForm, CompanyForm
-from manager.models import Offer, RecruitmentStep, Company
+from manager.forms import (
+    CompanyForm,
+    OfferCreateForm,
+    OfferUpdateForm,
+    RecruitmentStepForm,
+)
+from manager.models import Company, Offer, RecruitmentStep
 
 
 class HomePage(TemplateView):
@@ -113,7 +118,13 @@ class OfferListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({"archived": self.model.objects.filter(developer=self.request.user).exclude(status__in=self.model.statuses_active())})
+        context.update(
+            {
+                "archived": self.model.objects.filter(developer=self.request.user).exclude(
+                    status__in=self.model.statuses_active()
+                )
+            }
+        )
         return context
 
 
@@ -180,7 +191,11 @@ class OfferSignContractView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
 
     def test_func(self):
         offer = self.get_object()
-        if self.request.user == offer.developer and offer.status == Offer.Statuses.ACTIVE and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS:
+        if (
+            self.request.user == offer.developer
+            and offer.status == Offer.Statuses.ACTIVE
+            and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS
+        ):
             return True
         return False
 
@@ -296,15 +311,27 @@ class RecruitmentStepFinishView(RecruitmentStepChangeStatusBaseView):
 
 
 class RecruitmentStepAcceptView(RecruitmentStepChangeStatusBaseView):
-    statuses_from = (RecruitmentStep.Statuses.CREATED, RecruitmentStep.Statuses.PLANNED, RecruitmentStep.Statuses.FINISHED)
+    statuses_from = (
+        RecruitmentStep.Statuses.CREATED,
+        RecruitmentStep.Statuses.PLANNED,
+        RecruitmentStep.Statuses.FINISHED,
+    )
     status_to = RecruitmentStep.Statuses.SUCCESS
 
 
 class RecruitmentStepRejectView(RecruitmentStepChangeStatusBaseView):
-    statuses_from = (RecruitmentStep.Statuses.CREATED, RecruitmentStep.Statuses.PLANNED, RecruitmentStep.Statuses.FINISHED)
+    statuses_from = (
+        RecruitmentStep.Statuses.CREATED,
+        RecruitmentStep.Statuses.PLANNED,
+        RecruitmentStep.Statuses.FINISHED,
+    )
     status_to = RecruitmentStep.Statuses.NEGATIVE
 
 
 class RecruitmentStepResignView(RecruitmentStepChangeStatusBaseView):
-    statuses_from = (RecruitmentStep.Statuses.CREATED, RecruitmentStep.Statuses.PLANNED, RecruitmentStep.Statuses.FINISHED)
+    statuses_from = (
+        RecruitmentStep.Statuses.CREATED,
+        RecruitmentStep.Statuses.PLANNED,
+        RecruitmentStep.Statuses.FINISHED,
+    )
     status_to = RecruitmentStep.Statuses.RESIGNED
