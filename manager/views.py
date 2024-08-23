@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -215,10 +215,7 @@ class OfferSignContractView(OfferUpdateBaseView):
     def test_func(self):
         if super().test_func():
             offer = self.get_object()
-            if (
-                offer.status == Offer.Statuses.ACTIVE
-                and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS
-            ):
+            if offer.status == Offer.Statuses.ACTIVE and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS:
                 return True
         return False
 
