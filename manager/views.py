@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -149,10 +150,11 @@ class OfferCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return f"Offer for {self.object.title} ({self.object.company}) has been created successfully."
 
 
-class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class OfferUpdateBaseView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Offer
-    form_class = OfferUpdateForm
-    extra_context = {"title": _("Update Offer"), "action": "update"}
+    message_action = _("updated")
+    success_message = "Offer for %s (%s) has been %s successfully."
+    target_status = None
 
     def test_func(self):
         offer = self.get_object()
@@ -163,53 +165,72 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("offer-list")
 
+    def update_status(self, request):
+        offer = self.get_object()
+        offer.status = self.target_status
+        offer.save(update_fields=["status", "updated_on"])
+        self.send_success_message(request)
+        return redirect("offer-list")
+
     def get_success_message(self, cleaned_data):
-        return f"Offer for {self.object.title} ({self.object.company}) has been updated successfully."
+        return self.success_message % (self.object.title, self.object.company, self.message_action)
+
+    def send_success_message(self, request):
+        offer = self.get_object()
+        return messages.success(request, self.success_message % (offer.title, offer.company, self.message_action))
 
 
-class OfferSendView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Offer
+class OfferUpdateView(OfferUpdateBaseView):
+    form_class = OfferUpdateForm
+    extra_context = {"title": _("Update Offer"), "action": "update"}
+
+
+class OfferSendView(OfferUpdateBaseView):
     fields = ["status"]
+    message_action = _("sent")
+    target_status = Offer.Statuses.APPLICATION_SENT
 
     def test_func(self):
-        offer = self.get_object()
-        if self.request.user == offer.developer and offer.status == Offer.Statuses.CREATED:
-            return True
+        if super().test_func():
+            offer = self.get_object()
+            if offer.status == Offer.Statuses.CREATED:
+                return True
         return False
 
     def get(self, request, *args, **kwargs):
         offer = self.get_object()
-        offer.status = Offer.Statuses.APPLICATION_SENT
+        offer.status = self.target_status
         offer.application_sent_on = timezone.now()
         offer.save(update_fields=["status", "updated_on", "application_sent_on"])
+        self.send_success_message(request)
         return redirect("offer-list")
 
 
-class OfferSignContractView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class OfferSignContractView(OfferUpdateBaseView):
     model = Offer
     fields = ["status"]
+    message_action = _("signed")
+    target_status = Offer.Statuses.CONTRACT_SIGNED
 
     def test_func(self):
-        offer = self.get_object()
-        if (
-            self.request.user == offer.developer
-            and offer.status == Offer.Statuses.ACTIVE
-            and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS
-        ):
-            return True
+        if super().test_func():
+            offer = self.get_object()
+            if (
+                offer.status == Offer.Statuses.ACTIVE
+                and offer.latest_step.status == RecruitmentStep.Statuses.SUCCESS
+            ):
+                return True
         return False
 
     def get(self, request, *args, **kwargs):
-        offer = self.get_object()
-        offer.status = Offer.Statuses.CONTRACT_SIGNED
-        offer.application_sent_on = timezone.now()
-        offer.save(update_fields=["status", "updated_on", "application_sent_on"])
-        return redirect("offer-list")
+        super().get(request, *args, **kwargs)
+        return self.update_status(request)
 
 
-class OfferResignView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class OfferResignView(OfferUpdateBaseView):
     model = Offer
     fields = ["status"]
+    target_status = Offer.Statuses.RESIGNED
 
     def test_func(self):
         offer = self.get_object()
@@ -218,11 +239,8 @@ class OfferResignView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
     def get(self, request, *args, **kwargs):
-        offer = self.get_object()
-        offer.status = Offer.Statuses.RESIGNED
-        offer.application_sent_on = timezone.now()
-        offer.save(update_fields=["status", "updated_on", "application_sent_on"])
-        return redirect("offer-list")
+        super().get(request, *args, **kwargs)
+        return self.update_status(request)
 
 
 class RecruitmentStepDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):

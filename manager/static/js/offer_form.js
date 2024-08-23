@@ -19,6 +19,9 @@ function companySwitcher(element_id) {
     document.getElementById("div_id" + getAnotherId()).classList.add("hide");
 }
 var init_div_new_company = document.getElementById("div_id_new_company");
-init_div_new_company.classList.add("hide");
 init_div_new_company.removeAttribute("required");
+init_div_new_company.classList.add("hide");
 document.getElementById("switcher").classList.remove("hide");
+
+document.getElementById("_new_company").click();
+document.getElementById("_company").click();
